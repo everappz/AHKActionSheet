@@ -11,10 +11,11 @@
 typedef NS_ENUM(NSInteger, AHKActionSheetButtonType) {
     AHKActionSheetButtonTypeDefault = 0,
 	AHKActionSheetButtonTypeDisabled,
-    AHKActionSheetButtonTypeDestructive
+    AHKActionSheetButtonTypeDestructive,
 };
 
 @class AHKActionSheet;
+@class AHKActionSheetItem;
 typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 
 
@@ -91,7 +92,7 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
  *
  *  @param handler A completion handler block to execute when a dismissal animation (after the user tapped on the button) has finished.
  */
-- (void)addButtonWithTitle:(NSString *)title type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler;
+- (AHKActionSheetItem *)addButtonWithTitle:(NSString *)title type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler;
 
 /**
  *  Adds a button with an image. Has to be called before showing the action sheet.
@@ -99,7 +100,7 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
  *  @param image   The image to display on the left of the title.
  *  @param handler A completion handler block to execute when a dismissal animation (after the user tapped on the button) has finished.
  */
-- (void)addButtonWithTitle:(NSString *)title image:(UIImage *)image type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler;
+- (AHKActionSheetItem *)addButtonWithTitle:(NSString *)title image:(UIImage *)image type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler;
 
 /// Displays the action sheet.
 - (void)show;
@@ -107,4 +108,14 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 /// Dismisses the action sheet with an optional animation.
 - (void)dismissAnimated:(BOOL)animated;
 
+@end
+
+
+/// Used for storing button configuration.
+@interface AHKActionSheetItem : NSObject
+@property (copy, nonatomic) NSString *title;
+@property (strong, nonatomic) UIImage *image;
+@property (strong, nonatomic) UIView *accessory;
+@property (nonatomic) AHKActionSheetButtonType type;
+@property (copy, nonatomic) AHKActionSheetHandler handler;
 @end

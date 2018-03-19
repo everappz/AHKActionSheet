@@ -28,14 +28,6 @@ static const CGFloat kTopSpaceMarginFraction = 0.333f;
 static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 
-/// Used for storing button configuration.
-@interface AHKActionSheetItem : NSObject
-@property (copy, nonatomic) NSString *title;
-@property (strong, nonatomic) UIImage *image;
-@property (nonatomic) AHKActionSheetButtonType type;
-@property (strong, nonatomic) AHKActionSheetHandler handler;
-@end
-
 @implementation AHKActionSheetItem
 @end
 
@@ -124,6 +116,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     AHKActionSheetItem *item = self.items[(NSUInteger)indexPath.row];
 
     NSDictionary *attributes = nil;
+    UIView *accessoryView = item.accessory;
     switch (item.type)
     {
         case AHKActionSheetButtonTypeDefault:
@@ -157,6 +150,8 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         cell.selectedBackgroundView.backgroundColor = self.selectedBackgroundColor;
     }
 
+    cell.accessoryView = accessoryView;
+    
     return cell;
 }
 
@@ -244,12 +239,12 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 #pragma mark - Public
 
-- (void)addButtonWithTitle:(NSString *)title type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler
+- (AHKActionSheetItem *)addButtonWithTitle:(NSString *)title type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler
 {
-    [self addButtonWithTitle:title image:nil type:type handler:handler];
+    return [self addButtonWithTitle:title image:nil type:type handler:handler];
 }
 
-- (void)addButtonWithTitle:(NSString *)title image:(UIImage *)image type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler
+- (AHKActionSheetItem *)addButtonWithTitle:(NSString *)title image:(UIImage *)image type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler
 {
     AHKActionSheetItem *item = [[AHKActionSheetItem alloc] init];
     item.title = title;
@@ -257,6 +252,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     item.type = type;
     item.handler = handler;
     [self.items addObject:item];
+    return item;
 }
 
 - (void)show
