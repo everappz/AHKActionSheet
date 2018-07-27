@@ -94,6 +94,9 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 - (void)dealloc
 {
+    if (self.cancelOnTapEmptyAreaEnabled.boolValue) {
+        [self removeCancelTapGestureForView:self.tableView];
+    }
     self.tableView.dataSource = nil;
     self.tableView.delegate = nil;
 }
@@ -417,6 +420,18 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     UITapGestureRecognizer *cancelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelButtonTapped:)];
     cancelTap.delegate = self;
     [view addGestureRecognizer:cancelTap];
+}
+
+- (void)removeCancelTapGestureForView:(UIView*)view {
+    NSMutableArray *recognizers = [[NSMutableArray alloc] init];
+    [[view gestureRecognizers] enumerateObjectsUsingBlock:^(__kindof UIGestureRecognizer * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if([obj isKindOfClass:[UITapGestureRecognizer class]]){
+            [recognizers addObject:obj];
+        }
+    }];
+    [recognizers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [view removeGestureRecognizer:obj];
+    }];
 }
 
 - (void)setUpCancelButton
