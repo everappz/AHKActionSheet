@@ -18,41 +18,32 @@
 
 #pragma mark - UIViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
-
     [self.view addSubview:self.actionSheet];
     self.actionSheet.frame = self.view.bounds;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-
     self.viewAlreadyAppear = YES;
 }
 
-- (void)viewWillLayoutSubviews
-{
+- (void)viewWillLayoutSubviews{
     [super viewWillLayoutSubviews];
-
     self.actionSheet.frame = self.view.bounds;
 }
 
-- (BOOL)shouldAutorotate
-{
+- (BOOL)shouldAutorotate{
     // doesn't allow autorotation after the view did appear (rotation messes up a blurred background)
     return !self.viewAlreadyAppear;
 }
 
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations
-{
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     return UIInterfaceOrientationMaskAll;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle
-{
+- (UIStatusBarStyle)preferredStatusBarStyle{
     UIWindow *window = self.actionSheet.previousKeyWindow;
     if (!window) {
         window = [[UIApplication sharedApplication].windows firstObject];
@@ -60,8 +51,7 @@
     return [[window ahk_viewControllerForStatusBarStyle] preferredStatusBarStyle];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
+- (BOOL)prefersStatusBarHidden{
     UIWindow *window = self.actionSheet.previousKeyWindow;
     if (!window) {
         window = [[UIApplication sharedApplication].windows firstObject];
