@@ -410,6 +410,8 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
                                     saturationDeltaFactor:self.blurSaturationDeltaFactor
                                     maskImage:nil];
     UIImageView *backgroundView = [[UIImageView alloc] initWithImage:blurredViewSnapshot];
+    backgroundView.contentMode = UIViewContentModeScaleToFill;
+    backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     backgroundView.frame = self.bounds;
     backgroundView.alpha = 0.0f;
     [self addSubview:backgroundView];
