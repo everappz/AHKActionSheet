@@ -116,6 +116,7 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 @property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) UIView *accessory;
+@property (assign, nonatomic) CGFloat contentViewHorizontalOffset;
 @property (nonatomic) AHKActionSheetButtonType type;
 @property (copy, nonatomic) AHKActionSheetHandler handler;
 @end

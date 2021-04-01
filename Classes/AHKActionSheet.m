@@ -28,6 +28,27 @@ static const CGFloat kTopSpaceMarginFraction = 0.333f;
 static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 
+@interface AHKActionSheetCell : UITableViewCell
+
+@property (assign, nonatomic) CGFloat contentViewHorizontalOffset;
+
+@end
+
+@implementation AHKActionSheetCell
+
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    if(self.contentViewHorizontalOffset > 0){
+        CGRect contentFrame = self.contentView.frame;
+        const CGFloat delta = self.contentViewHorizontalOffset;
+        contentFrame.origin.x += delta;
+        contentFrame.size.width -= 2*delta;
+        [self.contentView setFrame:contentFrame];
+    }
+}
+
+@end
+
 @implementation AHKActionSheetItem
 @end
 
@@ -115,7 +136,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
+    AHKActionSheetCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
     AHKActionSheetItem *item = self.items[(NSUInteger)indexPath.row];
 
     NSDictionary *attributes = nil;
@@ -152,7 +173,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         cell.selectedBackgroundView = [[UIView alloc] init];
         cell.selectedBackgroundView.backgroundColor = self.selectedBackgroundColor;
     }
-
+    cell.contentViewHorizontalOffset = item.contentViewHorizontalOffset;
     cell.accessoryView = accessoryView;
     
     return cell;
@@ -496,12 +517,14 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     // http://stackoverflow.com/questions/25770119/ios-8-uitableview-separator-inset-0-not-working/25877725#25877725
     if([tableView respondsToSelector:@selector(setCellLayoutMarginsFollowReadableWidth:)])
     {
-        tableView.cellLayoutMarginsFollowReadableWidth = NO;
+        if (@available(iOS 9.0, *)) {
+            tableView.cellLayoutMarginsFollowReadableWidth = NO;
+        }
     }
 
     tableView.delegate = self;
     tableView.dataSource = self;
-    [tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kCellIdentifier];
+    [tableView registerClass:[AHKActionSheetCell class] forCellReuseIdentifier:kCellIdentifier];
     [self insertSubview:tableView aboveSubview:self.blurredBackgroundView];
     // move the content below the screen, ready to be animated in -show
     tableView.contentInset = UIEdgeInsetsMake(CGRectGetHeight(self.bounds), 0, 0, 0);
