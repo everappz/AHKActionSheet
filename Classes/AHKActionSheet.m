@@ -93,6 +93,8 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
                                           NSForegroundColorAttributeName : [UIColor grayColor] }];
     [appearance setCancelOnPanGestureEnabled:@(YES)];
     [appearance setCancelOnTapEmptyAreaEnabled:@(NO)];
+    [appearance setButtonContentViewHorizontalOffset:0.0];
+    [appearance setButtonTitleNumberOfLines:1];
     [appearance setAnimationDuration:kDefaultAnimationDuration];
 }
 
@@ -157,6 +159,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
     NSAttributedString *attrTitle = [[NSAttributedString alloc] initWithString:item.title attributes:attributes];
     cell.textLabel.attributedText = attrTitle;
+    cell.textLabel.numberOfLines = self.buttonTitleNumberOfLines;
     cell.textLabel.textAlignment = [self.buttonTextCenteringEnabled boolValue] ? NSTextAlignmentCenter : NSTextAlignmentLeft;
 
     // Use image with template mode with color the same as the text (when enabled).
@@ -173,7 +176,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         cell.selectedBackgroundView = [[UIView alloc] init];
         cell.selectedBackgroundView.backgroundColor = self.selectedBackgroundColor;
     }
-    cell.contentViewHorizontalOffset = item.contentViewHorizontalOffset;
+    cell.contentViewHorizontalOffset = self.buttonContentViewHorizontalOffset;
     cell.accessoryView = accessoryView;
     
     return cell;

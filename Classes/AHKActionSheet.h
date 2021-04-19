@@ -55,6 +55,10 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 @property (copy, nonatomic) NSDictionary *disabledButtonTextAttributes UI_APPEARANCE_SELECTOR;
 @property (copy, nonatomic) NSDictionary *destructiveButtonTextAttributes UI_APPEARANCE_SELECTOR;
 @property (copy, nonatomic) NSDictionary *cancelButtonTextAttributes UI_APPEARANCE_SELECTOR;
+
+@property (assign, nonatomic) CGFloat buttonContentViewHorizontalOffset UI_APPEARANCE_SELECTOR;
+@property (assign, nonatomic) NSInteger buttonTitleNumberOfLines UI_APPEARANCE_SELECTOR;
+
 /// Duration of the show/dismiss animations. Defaults to 0.5.
 @property (nonatomic) NSTimeInterval animationDuration UI_APPEARANCE_SELECTOR;
 
@@ -116,7 +120,6 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 @property (copy, nonatomic) NSString *title;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) UIView *accessory;
-@property (assign, nonatomic) CGFloat contentViewHorizontalOffset;
 @property (nonatomic) AHKActionSheetButtonType type;
 @property (copy, nonatomic) AHKActionSheetHandler handler;
 @end
