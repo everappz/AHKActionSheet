@@ -11,7 +11,9 @@
 #import "UIWindow+AHKAdditions.h"
 
 @interface AHKActionSheetViewController ()
+
 @property (nonatomic) BOOL viewAlreadyAppear;
+
 @end
 
 @implementation AHKActionSheetViewController
@@ -20,18 +22,24 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
+    self.actionSheet.frame = self.view.bounds;
     [self.view addSubview:self.actionSheet];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.actionSheet.frame = self.view.bounds;
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     self.actionSheet.frame = self.view.bounds;
 }
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     self.viewAlreadyAppear = YES;
-}
-
-- (void)viewWillLayoutSubviews{
-    [super viewWillLayoutSubviews];
-    self.actionSheet.frame = self.view.bounds;
 }
 
 - (BOOL)shouldAutorotate{
@@ -43,20 +51,12 @@
     return UIInterfaceOrientationMaskAll;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle{
-    UIWindow *window = self.actionSheet.previousKeyWindow;
-    if (!window) {
-        window = [[UIApplication sharedApplication].windows firstObject];
-    }
-    return [[window ahk_viewControllerForStatusBarStyle] preferredStatusBarStyle];
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return self.parentViewController.preferredStatusBarStyle;
 }
 
-- (BOOL)prefersStatusBarHidden{
-    UIWindow *window = self.actionSheet.previousKeyWindow;
-    if (!window) {
-        window = [[UIApplication sharedApplication].windows firstObject];
-    }
-    return [[window ahk_viewControllerForStatusBarHidden] prefersStatusBarHidden];
+- (BOOL)prefersStatusBarHidden {
+    return self.parentViewController.prefersStatusBarHidden;
 }
 
 @end

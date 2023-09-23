@@ -11,8 +11,6 @@
 
 @interface UIWindow (AHKAdditions)
 
-- (UIViewController *)ahk_viewControllerForStatusBarStyle;
-- (UIViewController *)ahk_viewControllerForStatusBarHidden;
 - (UIImage *)ahk_snapshot;
 
 @end

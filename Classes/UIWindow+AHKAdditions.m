@@ -14,26 +14,6 @@
 
 #pragma mark - Public
 
-- (UIViewController *)ahk_viewControllerForStatusBarStyle
-{
-    UIViewController *currentViewController = [self currentViewController];
-
-    while ([currentViewController childViewControllerForStatusBarStyle]) {
-        currentViewController = [currentViewController childViewControllerForStatusBarStyle];
-    }
-    return currentViewController;
-}
-
-- (UIViewController *)ahk_viewControllerForStatusBarHidden
-{
-    UIViewController *currentViewController = [self currentViewController];
-
-    while ([currentViewController childViewControllerForStatusBarHidden]) {
-        currentViewController = [currentViewController childViewControllerForStatusBarHidden];
-    }
-    return currentViewController;
-}
-
 - (UIImage *)ahk_snapshot
 {
     // source (under MIT license): https://github.com/shinydevelopment/SDScreenshotCapture/blob/master/SDScreenshotCapture/SDScreenshotCapture.m#L35
@@ -83,17 +63,6 @@
     UIGraphicsEndImageContext();
 
     return image;
-}
-
-#pragma mark - Private
-
-- (UIViewController *)currentViewController
-{
-    UIViewController *viewController = self.rootViewController;
-    while (viewController.presentedViewController) {
-        viewController = viewController.presentedViewController;
-    }
-    return viewController;
 }
 
 @end

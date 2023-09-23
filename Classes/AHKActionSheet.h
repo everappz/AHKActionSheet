@@ -107,7 +107,7 @@ typedef void(^AHKActionSheetHandler)(AHKActionSheet *actionSheet);
 - (AHKActionSheetItem *)addButtonWithTitle:(NSString *)title image:(UIImage *)image type:(AHKActionSheetButtonType)type handler:(AHKActionSheetHandler)handler;
 
 /// Displays the action sheet.
-- (void)show;
+- (void)presentInViewController:(UIViewController *)viewController animated:(BOOL)animated;
 
 /// Dismisses the action sheet with an optional animation.
 - (void)dismissAnimated:(BOOL)animated;
