@@ -24,17 +24,8 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
     self.actionSheet.frame = self.view.bounds;
+    self.actionSheet.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.actionSheet];
-}
-
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    self.actionSheet.frame = self.view.bounds;
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
-    self.actionSheet.frame = self.view.bounds;
 }
 
 - (void)viewDidAppear:(BOOL)animated{

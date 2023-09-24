@@ -23,7 +23,7 @@ static const CGFloat kAutoDismissOffset = 80.0f;
 static const CGFloat kFlickDownHandlingOffset = 20.0f;
 static const CGFloat kFlickDownMinVelocity = 2000.0f;
 // How much free space to leave at the top (above the tableView's contents) when there's a lot of elements. It makes this control look similar to the UIActionSheet.
-static const CGFloat kTopSpaceMarginFraction = 0.333f;
+static const CGFloat kTopSpaceMarginFraction = 0.4f;
 // cancelButton's shadow height as the ratio to the cancelButton's height
 static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
@@ -60,10 +60,10 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 @property (strong, nonatomic) UIViewController *actionSheetViewController;
 @property (weak, nonatomic) UIWindow *previousKeyWindow;
 @property (weak, nonatomic) UIViewController *presentingViewController;
-@property (weak, nonatomic) UIImageView *blurredBackgroundView;
-@property (weak, nonatomic) UITableView *tableView;
-@property (weak, nonatomic) UIButton *cancelButton;
-@property (weak, nonatomic) UIView *cancelButtonShadowView;
+@property (strong, nonatomic) UIImageView *blurredBackgroundView;
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UIButton *cancelButton;
+@property (strong, nonatomic) UIView *cancelButtonShadowView;
 
 @end
 
@@ -106,7 +106,6 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     self = [super init];
     
     if (self) {
-        self.backgroundColor = [UIColor clearColor];
         _title = [title copy];
         _cancelButtonTitle = @"Cancel";
     }
@@ -301,9 +300,9 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     NSCParameterAssert(previousKeyWindow);
     self.previousKeyWindow = previousKeyWindow;
     UIImage *previousKeyWindowSnapshot = [previousKeyWindow ahk_snapshot];
-    [self setUpBlurredBackgroundWithSnapshot:previousKeyWindowSnapshot];
     
     [self attachActionSheetViewController];
+    [self setUpBlurredBackgroundWithSnapshot:previousKeyWindowSnapshot];
     [self setUpCancelButton];
     [self setUpTableView];
     
@@ -311,21 +310,19 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         [self setUpCancelTapGestureForView:self.tableView];
     }
     
-    CGFloat slideDownMinOffset = (CGFloat)fmin(CGRectGetHeight(self.frame) + self.tableView.contentOffset.y, CGRectGetHeight(self.frame));
-    self.tableView.transform = CGAffineTransformMakeTranslation(0, slideDownMinOffset);
+    self.tableView.transform = CGAffineTransformMakeTranslation(0.0, CGRectGetHeight(self.frame));
     
     void(^immediateAnimations)(void) = ^(void) {
         self.blurredBackgroundView.alpha = 1.0f;
     };
     
     void(^delayedAnimations)(void) = ^(void) {
-        self.cancelButton.frame = CGRectMake(0,
+        self.cancelButton.frame = CGRectMake(0.0,
                                              CGRectGetMaxY(self.bounds) - self.cancelButtonHeight,
                                              CGRectGetWidth(self.bounds),
                                              self.cancelButtonHeight);
         
         self.tableView.transform = CGAffineTransformMakeTranslation(0, 0);
-        
         
         // manual calculation of table's contentSize.height
         CGFloat tableContentHeight = [self.items count] * self.buttonHeight + CGRectGetHeight(self.tableView.tableHeaderView.frame);
@@ -413,13 +410,9 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         // animate sliding down tableView and cancelButton.
         [UIView animateWithDuration:duration animations:^{
             self.blurredBackgroundView.alpha = 0.0f;
-            self.cancelButton.transform = CGAffineTransformTranslate(self.cancelButton.transform, 0, self.cancelButtonHeight);
+            self.cancelButton.transform = CGAffineTransformTranslate(self.cancelButton.transform, 0.0, self.cancelButtonHeight);
             self.cancelButtonShadowView.alpha = 0.0f;
-            
-            // Shortest shift of position sufficient to hide all tableView contents below the bottom margin.
-            // contentInset isn't used here (unlike in -show) because it caused weird problems with animations in some cases.
-            CGFloat slideDownMinOffset = (CGFloat)fmin(CGRectGetHeight(self.frame) + self.tableView.contentOffset.y, CGRectGetHeight(self.frame));
-            self.tableView.transform = CGAffineTransformMakeTranslation(0, slideDownMinOffset);
+            self.tableView.transform = CGAffineTransformMakeTranslation(0.0,  CGRectGetHeight(self.frame));
         } completion:^(BOOL finished) {
             tearDownView();
         }];
