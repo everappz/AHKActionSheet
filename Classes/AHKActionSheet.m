@@ -15,7 +15,7 @@
 
 static const NSTimeInterval kDefaultAnimationDuration = 0.5f;
 // Length of the range at which the blurred background is being hidden when the user scrolls the tableView to the top.
-static const CGFloat kBlurFadeRangeSize = 200.0f;
+static const CGFloat kBlurFadeRangeSize = 600.0f;
 static NSString * const kCellIdentifier = @"Cell";
 // How much user has to scroll beyond the top of the tableView for the view to dismiss automatically.
 static const CGFloat kAutoDismissOffset = 80.0f;
@@ -38,7 +38,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    if(self.contentViewHorizontalOffset > 0){
+    if (self.contentViewHorizontalOffset > 0) {
         CGRect contentFrame = self.contentView.frame;
         const CGFloat delta = self.contentViewHorizontalOffset;
         contentFrame.origin.x += delta;
@@ -55,14 +55,16 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 
 @interface AHKActionSheet() <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
+
 @property (strong, nonatomic) NSMutableArray *items;
+@property (strong, nonatomic) UIViewController *actionSheetViewController;
 @property (weak, nonatomic) UIWindow *previousKeyWindow;
 @property (weak, nonatomic) UIViewController *presentingViewController;
-@property (strong, nonatomic) UIViewController *actionSheetViewController;
 @property (weak, nonatomic) UIImageView *blurredBackgroundView;
 @property (weak, nonatomic) UITableView *tableView;
 @property (weak, nonatomic) UIButton *cancelButton;
 @property (weak, nonatomic) UIView *cancelButtonShadowView;
+
 @end
 
 @implementation AHKActionSheet
@@ -119,6 +121,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
 - (void)dealloc
 {
+    NSCParameterAssert(self.tableView);
     if (self.cancelOnTapEmptyAreaEnabled.boolValue) {
         [self removeCancelTapGestureForView:self.tableView];
     }
@@ -391,17 +394,18 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     self.tableView.contentInset = UIEdgeInsetsMake(-self.tableView.contentOffset.y, 0, 0, 0);
     
     __weak AHKActionSheet *weakSelf = self;
+    
     void(^tearDownView)(void) = ^(void) {
         // remove the views because it's easiest to just recreate them if the action sheet is shown again
         
-        [self.tableView removeFromSuperview];
-        [self.cancelButton removeFromSuperview];
-        [self.blurredBackgroundView removeFromSuperview];
+        [weakSelf.tableView removeFromSuperview];
+        [weakSelf.cancelButton removeFromSuperview];
+        [weakSelf.blurredBackgroundView removeFromSuperview];
         
-        [self detachActionSheetViewController];
+        [weakSelf detachActionSheetViewController];
         
         if (completionHandler) {
-            completionHandler(self);
+            completionHandler(weakSelf);
         }
     };
     
