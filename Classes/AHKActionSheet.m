@@ -23,7 +23,7 @@ static const CGFloat kAutoDismissOffset = 80.0f;
 static const CGFloat kFlickDownHandlingOffset = 20.0f;
 static const CGFloat kFlickDownMinVelocity = 2000.0f;
 // How much free space to leave at the top (above the tableView's contents) when there's a lot of elements. It makes this control look similar to the UIActionSheet.
-static const CGFloat kTopSpaceMarginFraction = 0.4f;
+static const CGFloat kTopSpaceMarginFraction = 0.5f;
 // cancelButton's shadow height as the ratio to the cancelButton's height
 static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
