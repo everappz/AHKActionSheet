@@ -27,32 +27,14 @@ static const CGFloat kTopSpaceMarginFraction = 0.5f;
 // cancelButton's shadow height as the ratio to the cancelButton's height
 static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
 
-
 @interface AHKActionSheetCell : UITableViewCell
-
-@property (assign, nonatomic) CGFloat contentViewHorizontalOffset;
-
 @end
 
 @implementation AHKActionSheetCell
-
-- (void)layoutSubviews{
-    [super layoutSubviews];
-    if (self.contentViewHorizontalOffset > 0) {
-        CGRect contentFrame = self.contentView.frame;
-        const CGFloat delta = self.contentViewHorizontalOffset;
-        contentFrame.origin.x += delta;
-        contentFrame.size.width -= 2*delta;
-        [self.contentView setFrame:contentFrame];
-    }
-}
-
 @end
 
 @implementation AHKActionSheetItem
 @end
-
-
 
 @interface AHKActionSheet() <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate>
 
@@ -180,7 +162,7 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
         cell.selectedBackgroundView = [[UIView alloc] init];
         cell.selectedBackgroundView.backgroundColor = self.selectedBackgroundColor;
     }
-    cell.contentViewHorizontalOffset = self.buttonContentViewHorizontalOffset;
+    
     cell.accessoryView = accessoryView;
     
     return cell;
@@ -217,6 +199,11 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     // Explictly set your cell's layout margins
     if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
         [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
+    
+    const CGFloat horizontalLayoutMargins = self.buttonContentViewHorizontalOffset;
+    if ([cell respondsToSelector:@selector(setDirectionalLayoutMargins:)]) {
+        [cell setDirectionalLayoutMargins:NSDirectionalEdgeInsetsMake(0.0, horizontalLayoutMargins, 0.0, horizontalLayoutMargins)];
     }
 }
 
