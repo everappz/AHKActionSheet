@@ -43,11 +43,11 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return self.parentViewController.preferredStatusBarStyle;
+    return self.AHK_preferredStatusBarStyle;
 }
 
 - (BOOL)prefersStatusBarHidden {
-    return self.parentViewController.prefersStatusBarHidden;
+    return self.AHK_prefersStatusBarHidden;
 }
 
 @end

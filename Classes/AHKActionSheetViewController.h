@@ -13,5 +13,7 @@
 @interface AHKActionSheetViewController : UIViewController
 
 @property (strong, nonatomic) AHKActionSheet *actionSheet;
+@property (assign, nonatomic) UIStatusBarStyle AHK_preferredStatusBarStyle;
+@property (assign, nonatomic) BOOL AHK_prefersStatusBarHidden;
 
 @end

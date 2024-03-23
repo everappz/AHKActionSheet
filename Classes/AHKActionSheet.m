@@ -413,12 +413,18 @@ static const CGFloat kCancelButtonShadowHeightRatio = 0.333f;
     AHKActionSheetViewController *actionSheetVC = [[AHKActionSheetViewController alloc] initWithNibName:nil bundle:nil];
     self.actionSheetViewController = actionSheetVC;
     actionSheetVC.actionSheet = self;
+    
     NSCParameterAssert(self.presentingViewController);
+    actionSheetVC.AHK_preferredStatusBarStyle = self.presentingViewController.preferredStatusBarStyle;
+    actionSheetVC.AHK_prefersStatusBarHidden = self.presentingViewController.prefersStatusBarHidden;
+    
+    UIView *hostView = self.presentingViewController.view;
+    NSCParameterAssert(hostView);
     
     [self.presentingViewController addChildViewController:actionSheetVC];
     actionSheetVC.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    [actionSheetVC.view setFrame:self.presentingViewController.view.bounds];
-    [self.presentingViewController.view addSubview:actionSheetVC.view];
+    [actionSheetVC.view setFrame:hostView.bounds];
+    [hostView addSubview:actionSheetVC.view];
     [actionSheetVC didMoveToParentViewController:self.presentingViewController];
 }
 
